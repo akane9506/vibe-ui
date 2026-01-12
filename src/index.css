@@ -1,8 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+
 @import "tailwindcss";
+@import "@radix-ui/themes/styles.css" layer(components);
 @import "./theme.css";
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: system-ui, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -12,10 +15,17 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-body {
-  margin: 0;
+.radix-themes {
+  --default-font-family: "Noto Sans", sans-serif;
+}
+
+/* body {
   display: flex;
   place-items: center;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100dvh;
+} */
+
+#root {
+  height: 100%;
 }
