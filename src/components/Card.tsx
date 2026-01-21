@@ -3,10 +3,13 @@ import type { PropsWithChildren } from "react";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { MessageSquareQuote } from "lucide-react";
+import Tag from "./Tag";
+import { Button } from "./ui/button";
 
 type CardProps = {
   title: string;
   description: string;
+  tags: string[];
   contentClassName?: string;
 } & PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>;
 
@@ -15,39 +18,46 @@ export default function Card({
   description,
   contentClassName,
   className,
+  tags,
   children,
   ...props
 }: CardProps) {
   return (
     <div
       className={cn(
-        "rounded-3xl flex flex-col gap-1 justify-start shadow-xl bg-white",
-        className
+        "rounded-3xl flex flex-col justify-start shadow-xl bg-white",
+        className,
       )}
       {...props}
     >
-      <div className="p-2 space-y-3">
+      <div className="p-2">
         <section
           className={cn(
             "relative bg-accent rounded-2xl flex justify-center items-center overflow-hidden",
-            contentClassName
+            contentClassName,
           )}
         >
           {children}
         </section>
-        <section className="px-4 flex justify-between items-center">
-          <div className="space-y-2">
-            <h3 className="font-semibold">{title}</h3>
-            <p className="text-sm/4 text-muted-foreground">{description}</p>
-          </div>
-          <MessageSquareQuote
-            size={40}
-            className="stroke-2 p-1.5 bg-muted-foreground rounded-full stroke-background hover:bg-accent hover:stroke-primary transition-colors duration-150"
-          />
-        </section>
+      </div>
+      <div className="px-4 flex justify-between items-center gap-3 mb-3">
+        <div className="space-y-1">
+          <h3 className="font-semibold">{title}</h3>
+          <p className="text-sm/4 tracking-tight text-muted-foreground">{description}</p>
+        </div>
+        <Button
+          variant={"outline"}
+          className="group w-10 h-10 transition-colors duration-300 hover:cursor-pointer hover:bg-background"
+        >
+          <MessageSquareQuote className="stroke-2 stroke-primary/40 group-hover:stroke-primary transition-colors duration-300" />
+        </Button>
       </div>
       <Separator />
-      <div className="my-3 p-2">Tags</div>
+      <div className="my-3 px-4 flex flex-row-reverse gap-2">
+        {tags.map((tagName) => (
+          <Tag key={title + tagName} tagName={tagName} />
+        ))}
+      </div>
     </div>
   );
 }

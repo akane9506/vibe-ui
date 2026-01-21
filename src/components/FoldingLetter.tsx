@@ -6,7 +6,7 @@ const sampleText = `Dear Reader,
 
 You ask what compelled me to write The Duel, and whether I intended it as a judgment upon the men who inhabit its pages. I must answer honestly: I do not judge them. I merely observe.
 
-Laevsky’s weakness, so often condemned, seemed to me neither exceptional nor monstrous. On the contrary, it is painfully common. He is a man who understands how he ought to live, yet lacks the strength to live in accordance with that understanding. This conflict—between knowledge and action—interested me far more than any moral resolution. Life, after all, rarely provides verdicts; it provides circumstances.
+Laevsky’s weakness, so often condemned, seemed to me neither exceptional nor monstrous. On the contrary, it is painfully common. He is a man who understands how he ought to live, yet lacks the strength to live in accordance with that understanding.
 
 With sincere respect,
 Anton Chekhov
@@ -30,7 +30,7 @@ function splitTextByLanguage(text: string) {
 function splitTextIntoPages(
   units: string[],
   pageHeight: number,
-  measurer: HTMLDivElement
+  measurer: HTMLDivElement,
 ) {
   const tempPages: string[] = [];
   let currPage = "";
@@ -54,15 +54,34 @@ function splitTextIntoPages(
   return tempPages;
 }
 
-export default function FoldingLetter() {
+type FoldingLetterProps = {
+  text?: string;
+  contentClassName?: string;
+  measureClassName?: string;
+};
+
+export default function FoldingLetter({
+  text,
+  contentClassName,
+  measureClassName,
+}: FoldingLetterProps) {
   const measureRef = useRef<HTMLDivElement>(null);
   const [pages, setPages] = useState<string[]>([]);
   const [isPending, startTransition] = useTransition();
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
-  const measurerStyle = cn("h-30 w-90 whitespace-pre-wrap text-sm px-3");
+  const measurerStyle = cn(
+    "h-30 w-90 whitespace-pre-wrap text-sm px-3",
+    measureClassName,
+  );
+  // the content style should be somewhat based on the measure style
+  // especially the width and the height properties
+  const contentStyle = cn(
+    "relative w-90 h-30 bg-background shadow-xl box-content rounded-md",
+    contentClassName,
+  );
   const middlePageGradient = cn(
-    "bg-linear-[180deg,var(--accent),var(--background)_10%,var(--background)_80%,var(--accent)]"
+    "bg-linear-[180deg,var(--accent),var(--background)_10%,var(--background)_80%,var(--accent)]",
   );
 
   // page style
@@ -72,17 +91,17 @@ export default function FoldingLetter() {
     startTransition(() => {
       if (!measureRef.current) return;
       const measurer = measureRef.current;
-      const units = splitTextByLanguage(sampleText);
+      const units = splitTextByLanguage(text ?? sampleText);
       const tempPages = splitTextIntoPages(units, pageHeight, measurer);
       setPages(tempPages);
     });
-  }, []);
+  }, [text]);
 
   const pagePadding = 12;
 
   return (
     <motion.div
-      className="relative w-90 h-30 bg-background shadow-xl box-content rounded-md"
+      className={contentStyle}
       style={{ paddingTop: pagePadding, paddingBottom: pagePadding }}
       initial={{ height: pageHeight + 2 * pagePadding, rotateZ: 0 }}
       animate={{
@@ -114,7 +133,7 @@ export default function FoldingLetter() {
                 className={cn(
                   "absolute left-0 overflow-hidden backface-hidden bg-background",
                   index === 1 && middlePageGradient,
-                  measurerStyle
+                  measurerStyle,
                 )}
                 initial={{
                   top: top,
