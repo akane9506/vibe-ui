@@ -2,6 +2,7 @@ import Card from "@/components/Card";
 import FoldingLetter from "@/components/FoldingLetter";
 import RippleButton from "./components/RippleButton";
 import SweepButton from "./components/SweepButton";
+import RadialGradientButton from "./components/RadialGradientButton";
 
 function App() {
   return (
@@ -23,6 +24,15 @@ function App() {
         tags={["button", "effect"]}
       >
         <SweepButton text="Sweep Button" duration={400} />
+      </Card>
+      <Card
+        title="Gradient Button"
+        description="A button with a dynamic radial gradient that follows your cursor and emits an expanding ripple on click."
+        className="w-74 h-fit" // needs calculation based on the contentClassName
+        contentClassName="h-60 w-70"
+        tags={["button", "effect"]}
+      >
+        <RadialGradientButton text="Gradient Button" duration={600} />
       </Card>
       <Card
         title="Folding Letter"

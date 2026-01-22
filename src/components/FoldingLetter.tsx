@@ -102,6 +102,7 @@ export default function FoldingLetter({
   return (
     <motion.div
       className={contentStyle}
+      onClick={() => setIsExpanded((prev) => !prev)}
       style={{ paddingTop: pagePadding, paddingBottom: pagePadding }}
       initial={{ height: pageHeight + 2 * pagePadding, rotateZ: 0 }}
       animate={{
@@ -120,7 +121,11 @@ export default function FoldingLetter({
       {!isPending && (
         <div ref={measureRef} className={cn(measurerStyle, "fixed top-0 left-100")} />
       )}
-      <div onClick={() => setIsExpanded((prev) => !prev)}>
+      <div
+        onClickCapture={(e) => {
+          e.stopPropagation(); // allows selection
+        }}
+      >
         {!isPending &&
           pages.slice(0, 3).map((content, index) => {
             const top = isExpanded
